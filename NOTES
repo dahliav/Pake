@@ -11,3 +11,14 @@ xattr -cr /Applications/앱이름.app
 ## 빌드 시 주의사항
 App name은 영문만 사용 (한글 X)
 URL은 https://로 시작하는 전체 주소 입력
+
+
+## mac 환경 로그인 유지 안되는 이슈 해소
+수정할 파일
+src-tauri/src/app/window.rs
+
+수정 내용
+변경전
+#[cfg(not(target_os = "macos"))]
+변경후
+#[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]

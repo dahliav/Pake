@@ -53,7 +53,7 @@ on:
         required: false
         default: "deb"
       user_agent:
-        description: "Custom User-Agent (Chrome UA for login session)"
+        description: "Custom User-Agent (for login session)"
         required: false
         default: ""
 
@@ -137,7 +137,7 @@ jobs:
           fi
 
           echo "Running: node dist/cli.js $ARGS"
-          node dist/cli.js $ARGS
+          eval node dist/cli.js $ARGS
 
       - name: Build App (Windows)
         if: runner.os == 'Windows'
@@ -164,6 +164,10 @@ jobs:
 
           if ("${{ inputs.hide_title_bar }}" -eq "true") {
             $args += "--hide-title-bar"
+          }
+
+          if ("${{ inputs.user_agent }}" -ne "") {
+            $args += "--user-agent", "${{ inputs.user_agent }}"
           }
 
           Write-Host "Running: node dist/cli.js $($args -join ' ')"

@@ -52,12 +52,7 @@ on:
         description: "Package formats (comma-separated: deb,appimage,rpm)"
         required: false
         default: "deb"
-      options:
-        description: "Additional Pake CLI options (e.g., --user-agent)"
-        required: false
-        default: ""
   
-
 jobs:
   build:
     name: ${{ inputs.platform }}
@@ -131,10 +126,6 @@ jobs:
 
           if [ -n "${{ inputs.targets }}" ] && [ "${{ runner.os }}" == "Linux" ]; then
             ARGS="$ARGS --targets ${{ inputs.targets }}"
-          fi
-
-          if [ -n "${{ inputs.options }}" ]; then
-            ARGS="$ARGS ${{ inputs.options }}"
           fi
 
           echo "Running: node dist/cli.js $ARGS"

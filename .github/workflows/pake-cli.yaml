@@ -133,8 +133,7 @@ jobs:
           fi
 
           if [ -n "${{ inputs.user_agent }}" ]; then
-            export PAKE_USER_AGENT="${{ inputs.user_agent }}"
-            ARGS="$ARGS --user-agent \"$PAKE_USER_AGENT\""
+            ARGS="$ARGS --user-agent '${{ inputs.user_agent }}'"
           fi
 
           echo "Running: node dist/cli.js $ARGS"

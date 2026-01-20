@@ -15,43 +15,13 @@ Apple 공증 없는 앱 실행 시 "확인할 수 없음" 오류가 나면:
 
 ---
 
-## 로그인 세션 유지 문제 해결
+## 로그인 세션 유지 제한사항
 
 ### 원인
 - Pake는 macOS에서 Safari 엔진(WKWebView) 사용
 - 일부 사이트는 Safari에서 세션 쿠키가 브라우저 종료 시 만료됨
-- Chrome에서만 로그인 유지되는 사이트의 경우 User-Agent 변경으로 해결 가능
+- Chrome에서만 로그인 유지되는 사이트는 Pake에서 해결 불가
 
-### 해결 방법: User-Agent를 Chrome으로 변경
-
-**1. workflow 파일 수정** (`.github/workflows/pake-cli.yaml`)
-
-입력 필드 추가 (inputs 섹션에):
-
-    options:
-      description: "Additional Pake CLI options (e.g., --user-agent)"
-      required: false
-      default: ""
-
-옵션 적용 로직 추가 (Build App Linux/macOS 섹션, echo "Running:... 줄 위에):
-
-    if [ -n "${{ inputs.options }}" ]; then
-      ARGS="$ARGS ${{ inputs.options }}"
-    fi
-
-**2. 빌드 시 Options 필드에 입력:**
-
-    --user-agent "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
-
----
-
-## 참고: data_directory 설정 (이미 적용됨)
-
-`src-tauri/src/app/window.rs`에서 macOS도 data_directory 사용하도록 설정되어 있음:
-
-    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
-    {
-        window_builder = window_builder.data_directory(_data_dir).theme(None);
-    }
-
-이 설정으로 쿠키/세션 데이터가 저장되지만, 사이트의 세션 정책에 따라 로그인 유지 여부가 결정됨.
+### 대안
+- **Chrome PWA 사용** (권장)
+- 비밀번호 관리자 앱 (1Password, Bitwarden) 사용

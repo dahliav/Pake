@@ -52,7 +52,11 @@ on:
         description: "Package formats (comma-separated: deb,appimage,rpm)"
         required: false
         default: "deb"
-  
+      user_agent:
+        description: "Custom User-Agent (Chrome UA for login session)"
+        required: false
+        default: ""
+
 jobs:
   build:
     name: ${{ inputs.platform }}
@@ -128,9 +132,12 @@ jobs:
             ARGS="$ARGS --targets ${{ inputs.targets }}"
           fi
 
+          if [ -n "${{ inputs.user_agent }}" ]; then
+            ARGS="$ARGS --user-agent '${{ inputs.user_agent }}'"
+          fi
+
           echo "Running: node dist/cli.js $ARGS"
           node dist/cli.js $ARGS
-          
 
       - name: Build App (Windows)
         if: runner.os == 'Windows'

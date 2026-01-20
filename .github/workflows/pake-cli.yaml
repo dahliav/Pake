@@ -52,6 +52,11 @@ on:
         description: "Package formats (comma-separated: deb,appimage,rpm)"
         required: false
         default: "deb"
+      options:
+        description: "Additional Pake CLI options (e.g., --user-agent)"
+        required: false
+        default: ""
+  
 
 jobs:
   build:
@@ -128,8 +133,13 @@ jobs:
             ARGS="$ARGS --targets ${{ inputs.targets }}"
           fi
 
+          if [ -n "${{ inputs.options }}" ]; then
+            ARGS="$ARGS ${{ inputs.options }}"
+          fi
+
           echo "Running: node dist/cli.js $ARGS"
           node dist/cli.js $ARGS
+          
 
       - name: Build App (Windows)
         if: runner.os == 'Windows'

@@ -52,7 +52,11 @@ on:
         description: "Package formats (comma-separated: deb,appimage,rpm)"
         required: false
         default: "deb"
-  
+      user_agent:
+        description: "Custom User-Agent (for login session)"
+        required: false
+        default: ""
+
 jobs:
   build:
     name: ${{ inputs.platform }}
@@ -128,9 +132,13 @@ jobs:
             ARGS="$ARGS --targets ${{ inputs.targets }}"
           fi
 
+          if [ -n "${{ inputs.user_agent }}" ]; then
+            export PAKE_USER_AGENT="${{ inputs.user_agent }}"
+            ARGS="$ARGS --user-agent \"$PAKE_USER_AGENT\""
+          fi
+
           echo "Running: node dist/cli.js $ARGS"
-          node dist/cli.js $ARGS
-          
+          eval node dist/cli.js $ARGS
 
       - name: Build App (Windows)
         if: runner.os == 'Windows'
@@ -157,6 +165,10 @@ jobs:
 
           if ("${{ inputs.hide_title_bar }}" -eq "true") {
             $args += "--hide-title-bar"
+          }
+
+          if ("${{ inputs.user_agent }}" -ne "") {
+            $args += "--user-agent", "${{ inputs.user_agent }}"
           }
 
           Write-Host "Running: node dist/cli.js $($args -join ' ')"

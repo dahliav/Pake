@@ -167,7 +167,7 @@ pub fn set_window(app: &mut App, config: &PakeConfig, tauri_config: &Config) -> 
     }
 
     // Windows and Linux: set data_directory before proxy_url
-    #[cfg(not(target_os = "macos"))]
+    #[cfg(any(target_os = "windows", target_os = "linux", target_os = "macos"))]
     {
         window_builder = window_builder.data_directory(_data_dir).theme(None);
 

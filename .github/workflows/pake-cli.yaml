@@ -52,10 +52,6 @@ on:
         description: "Package formats (comma-separated: deb,appimage,rpm)"
         required: false
         default: "deb"
-      user_agent:
-        description: "Custom User-Agent (for login session)"
-        required: false
-        default: ""
 
 jobs:
   build:
@@ -132,10 +128,6 @@ jobs:
             ARGS="$ARGS --targets ${{ inputs.targets }}"
           fi
 
-          if [ -n "${{ inputs.user_agent }}" ]; then
-            ARGS="$ARGS --user-agent '${{ inputs.user_agent }}'"
-          fi
-
           echo "Running: node dist/cli.js $ARGS"
           eval node dist/cli.js $ARGS
 
@@ -164,10 +156,6 @@ jobs:
 
           if ("${{ inputs.hide_title_bar }}" -eq "true") {
             $args += "--hide-title-bar"
-          }
-
-          if ("${{ inputs.user_agent }}" -ne "") {
-            $args += "--user-agent", "${{ inputs.user_agent }}"
           }
 
           Write-Host "Running: node dist/cli.js $($args -join ' ')"
